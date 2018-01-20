@@ -20,9 +20,9 @@ class LoginController
     include_once "view/login.html";
   }
 
-  private function validateData($value='')
+  private function validateData()
   {
-    $result = $model->Select
+    $result = $model->check()
   }
 }
 

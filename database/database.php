@@ -12,6 +12,11 @@ class DataBase
     $link = new PDO("mysql:host=localhost;dbname=isonomia", "root", "");
   }
 
+  function _destruct()
+  {
+    $link = NULL;
+  }
+
   /**
   *
   * Función para hacer consultas a la base de datos en general.
@@ -134,20 +139,43 @@ class DataBase
         $query = " WHERE {$condition}";
       }
 
-      $result = $link->query($query);
+      $result = $link->query($query) or die (print_r($link->errorInfo()));;
       return $result;
     } else {
       return NULL;
     }
   }
 
-  public function Delete($table, $index)
+  /**
+  *
+  * Función para eliminar datos una tabla de la base de datos.
+  *
+  * $table String Nombre de la tabla a la que se le modificarán los valores.
+  *
+  * $condition String Condición de selección de datos, de no ser especificado no se
+  *   incluirá en la consulta.
+  *
+  */
+  public function Delete($table, $condition)
   {
-    if(isset($tabel) && isset($index)) {
-      $query = "DELETE "
+    if(isset($tabel) && isset($condition)) {
+      $query = "DELETE FROM {$table} WHERE {$condition}";
+      $result = $link->query($query) or die (print_r($link->errorInfo()));
+      return $result;
     } else {
       return NULL;
     }
+  }
+
+  /**
+  *
+  * Función para preparar un string que se insertará
+  *   en la base de datos.
+  *
+  */
+  public function AntiHack($value)
+  {
+    return $link->quote($value);
   }
 }
 
